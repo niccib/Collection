@@ -1,0 +1,47 @@
+from flask import Flask, request
+
+app = Flask(__name__)
+
+app.config['DEBUG'] = True 
+
+favForm = """
+
+<form action="/fav" method="post">
+    <p><label>fav color: <input type="text" name="fav-color" value="{color}"/></label></p>
+    <p><label>fav number: <input type="text" name="fav-number" /></label></p>
+    <input type="submit"/>
+
+</form>
+"""
+@app.route('/fav', methods=['POST'])
+def fav():
+    color = request.form['fav-color']
+    number = request.form['fav-number']
+
+    if not number.isdigit():
+        error = '{number} is not a number'.format(number=number)
+        return redirect('/?color={color}&error={error}'.format(color=color, error=error))
+    return 'your fav color: {color}, your number:{number}'.format(color=color, number=number)
+
+
+@app.route('/')
+def index():
+    error = request.args.get('error')
+    color = request.args.get('color')
+
+    if color == None:
+        color = ''
+    form = favForm.format(color='blue')
+    if error:
+        return '<h3>{error}</h3>'.format(error=error) + form
+    else:
+        return form
+
+@app.route('/display')
+def display():
+    error = request.args.get('error')
+    things = ['car', 'boat', 'pencil']
+    return render_template('display.html')
+
+
+app.run()
