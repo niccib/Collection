@@ -20,6 +20,7 @@ namespace LaPizzaOrderPad.ViewModels
         public ShellViewModel()
         {
             Menu.Add(new FoodOrder { FoodItem = "Large", Price = 16.00 });
+            Menu.Add(new FoodOrder { FoodItem = "Medium", Price = 14.50 });
 
         }
     }
